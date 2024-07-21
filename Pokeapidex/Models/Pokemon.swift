@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Pokemon
-struct Pokemon: Codable {
+struct Pokemon: Codable, Identifiable {
     let abilities: [Ability]
     let baseExperience: Int
     let forms: [Species]
