@@ -11,7 +11,7 @@ import SwiftUI
 struct PokeapidexApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PokemonMainView(pokemonService: PokemonService(networkService: NetworkService()))
         }
     }
 }
