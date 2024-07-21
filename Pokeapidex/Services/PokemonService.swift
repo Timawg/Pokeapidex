@@ -8,7 +8,7 @@
 import Foundation
 
 protocol PokemonServiceProtocol: Service {
-    func getPokemonList() async throws -> PokemonList
+    func getPokemonList(limit: Int, offset: Int) async throws -> PokemonList
     func getPokemon(name: String) async throws -> Pokemon
     func getPokemon(id: Int) async throws -> Pokemon
 }
@@ -24,7 +24,7 @@ struct PokemonService: PokemonServiceProtocol {
     
     enum PokemonEndpoint: Endpoint {
         
-        case getPokemonList
+        case getPokemonList(limit: Int, offset: Int)
         case getPokemonByName(String)
         case getPokemonById(Int)
                 
@@ -46,9 +46,9 @@ struct PokemonService: PokemonServiceProtocol {
         }
     }
     
-    func getPokemonList() async throws -> PokemonList {
-        let endpoint: PokemonEndpoint = .getPokemonList
-        return try await networkService.send(request: endpoint.createURLRequest(base: baseURL))
+    func getPokemonList(limit: Int = 10000, offset: Int = 0) async throws -> PokemonList {
+        let endpoint: PokemonEndpoint = .getPokemonList(limit: limit, offset: offset)
+        return try await networkService.send(request: endpoint.createURLRequest(base: baseURL, queryItems: [.init(name: "limit", value: "\(limit)"), .init(name: "offset", value: "\(offset)")]))
     }
     
     func getPokemon(name: String) async throws -> Pokemon {

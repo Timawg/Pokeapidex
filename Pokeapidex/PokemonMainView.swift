@@ -6,20 +6,39 @@
 //
 
 import SwiftUI
+import Observation
+
+@Observable
+final class PokemonMainViewModel {
+    
+    private let pokemonService: PokemonServiceProtocol
+    
+    init(pokemonService: PokemonServiceProtocol) {
+        self.pokemonService = pokemonService
+    }
+    
+    var pokemonList: PokemonList?
+    var randomPokemon: Pokemon?
+    
+    @MainActor
+    func getPokemon() async throws {
+        pokemonList = try await pokemonService.getPokemonList(limit: 10000, offset: 0)
+        let random = pokemonList?.results.randomElement()?.name ?? ""
+        randomPokemon = try await pokemonService.getPokemon(name: random)
+    }
+    
+}
 
 struct PokemonMainView: View {
     
-    @State var pokemonList: PokemonList?
-    @State var randomPokemon: Pokemon?
-    
-    let pokemonService: PokemonServiceProtocol
+    @Environment(PokemonMainViewModel.self) var viewModel: PokemonMainViewModel
     
     var body: some View {
         VStack {
-            Text(randomPokemon?.name ?? "")
+            Text(viewModel.randomPokemon?.name ?? "")
             List {
-                if let pokemonList {
-                    ForEach(pokemonList.results) { pokemon in
+                if let list = viewModel.pokemonList {
+                    ForEach(list.results) { pokemon in
                         Text(pokemon.name)
                     }
                 }
@@ -28,9 +47,7 @@ struct PokemonMainView: View {
         .padding()
         .task {
             do {
-                pokemonList = try await pokemonService.getPokemonList()
-                let random = pokemonList?.results.randomElement()?.name ?? ""
-                randomPokemon = try await pokemonService.getPokemon(name: random)
+                try await viewModel.getPokemon()
             } catch {
                 
             }
@@ -39,5 +56,6 @@ struct PokemonMainView: View {
 }
 
 #Preview {
-    PokemonMainView(pokemonService: PokemonService(networkService: NetworkService()))
+    PokemonMainView()
+        .environment(PokemonMainViewModel(pokemonService: PokemonService(networkService: NetworkService())))
 }
