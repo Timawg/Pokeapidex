@@ -35,14 +35,20 @@ struct PokemonMainView: View {
     
     var body: some View {
         VStack {
-            Text(viewModel.randomPokemon?.name ?? "")
-            List {
-                if let list = viewModel.pokemonList {
-                    ForEach(list.results) { pokemon in
-                        Text(pokemon.name)
-                    }
-                }
+            if let randomPokemon = viewModel.randomPokemon {
+                PokemonDetailView(pokemon: randomPokemon)
             }
+
+            if let list = viewModel.pokemonList {
+                    List {
+                        ForEach(list.results) { result in
+                            Text(result.name.capitalized)
+                                .listRowBackground(Color.mint)
+                        }
+                    }
+                    .scrollContentBackground(.hidden)
+            }
+            
         }
         .padding()
         .task {
@@ -51,6 +57,38 @@ struct PokemonMainView: View {
             } catch {
                 
             }
+        }
+    }
+}
+
+struct PokemonDetailView: View {
+    
+    private let pokemon: Pokemon
+    
+    init(pokemon: Pokemon) {
+        self.pokemon = pokemon
+    }
+
+    var body: some View {
+        VStack {
+            LinearGradient(
+                colors: pokemon.pokemonTypes.map { $0.color },
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+            .clipShape(.circle)
+            .overlay {
+                AsyncImage(url: URL(string: pokemon.sprites?.other?.officialArtwork?.frontDefault ?? "")) { image in
+                    image
+                        .resizable()
+                        .imageScale(.medium)
+                        .padding()
+                } placeholder: {
+                    EmptyView()
+                }
+            }
+            .scaledToFit()
+            Text(pokemon.name.capitalized)
+                .font(.title)
         }
     }
 }

@@ -25,6 +25,10 @@ struct Pokemon: Codable {
     let stats: [Stat]
     let types: [TypeElement]
     let weight: Int
+    
+    var pokemonTypes: [PokemonType] {
+        types.map { $0.type.name }.map { .init(rawValue: $0) }.compactMap { $0 }
+    }
 
     enum CodingKeys: String, CodingKey {
         case abilities
