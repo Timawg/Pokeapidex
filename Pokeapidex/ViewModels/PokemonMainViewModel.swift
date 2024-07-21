@@ -8,6 +8,11 @@
 import Foundation
 import Observation
 
+enum SegmentState: Int {
+    case pokedex
+    case saved
+}
+
 @Observable
 final class PokemonMainViewModel {
     

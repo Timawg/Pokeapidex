@@ -9,11 +9,13 @@ import SwiftUI
 
 struct PokemonTopView: View {
     
-    private let pokemon: Pokemon
+    private let name: String
+    private let urlString: String?
     private let colors: [Color]
     
-    init(pokemon: Pokemon, colors: [Color]) {
-        self.pokemon = pokemon
+    init(name: String, urlString: String?, colors: [Color]) {
+        self.name = name
+        self.urlString = urlString
         self.colors = colors
     }
     
@@ -27,7 +29,7 @@ struct PokemonTopView: View {
             .clipShape(.circle)
             .overlay {
                 VStack {
-                    if let urlString = pokemon.sprites?.other?.officialArtwork?.frontDefault,
+                    if let urlString,
                        let url = URL(string: urlString) {
                         AsyncImage(url: url) { image in
                             image
@@ -41,7 +43,7 @@ struct PokemonTopView: View {
                 }
             }
             .scaledToFit()
-            Text(pokemon.name.capitalized)
+            Text(name.capitalized)
                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
         }
     }

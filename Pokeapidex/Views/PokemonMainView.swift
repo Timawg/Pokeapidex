@@ -11,12 +11,19 @@ struct PokemonMainView: View {
     
     @Environment(PokemonMainViewModel.self) var viewModel: PokemonMainViewModel
     
+    @State var segmentState: SegmentState = .pokedex
+    
     var body: some View {
         VStack(spacing: 8) {
             List {
                 pokemonTopSection
-                savedPokemonList
-                pokemonList
+                segmentedControl
+                switch segmentState {
+                case .pokedex:
+                    pokemonList
+                case .saved:
+                    savedPokemonList
+                }
             }
             .scrollContentBackground(.hidden)
         }
@@ -38,8 +45,9 @@ struct PokemonMainView: View {
         } footer: {
             if let randomPokemon = viewModel.randomPokemon {
                 VStack {
-                    PokemonTopView(pokemon: randomPokemon, colors: randomPokemon.pokemonTypes.map { $0.color })
+                    PokemonTopView(name: randomPokemon.name, urlString: randomPokemon.artworkUrl, colors: randomPokemon.pokemonTypes.map { $0.color })
                         .padding()
+                    
                     PokemonButtonStack(saved: viewModel.isSaved(pokemon: randomPokemon)) {
                         Task {
                             try await viewModel.randomizePokemon()
@@ -51,6 +59,25 @@ struct PokemonMainView: View {
                 }
             }
         }
+    }
+    
+    @ViewBuilder
+    var segmentedControl: some View {
+        Picker("Pokemon", selection: $segmentState, content: {
+            Text("Pokedéx")
+                .foregroundStyle(.white)
+                .tag(SegmentState.pokedex)
+
+            Text("Saved")
+                .foregroundStyle(.black)
+                .tag(SegmentState.saved)
+        })
+        .colorMultiply(.white)
+        .colorInvert()
+        .colorMultiply(.red)
+        .colorInvert()
+        .background(Color.white)
+        .pickerStyle(.segmented)
     }
     
     @ViewBuilder

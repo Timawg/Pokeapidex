@@ -29,6 +29,10 @@ struct Pokemon: Codable, Identifiable {
     var pokemonTypes: [PokemonType] {
         types.map { $0.type.name }.map { .init(rawValue: $0) }.compactMap { $0 }
     }
+    
+    var artworkUrl: String? {
+        sprites?.other?.officialArtwork?.frontDefault
+    }
 
     enum CodingKeys: String, CodingKey {
         case abilities
