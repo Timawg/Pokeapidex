@@ -28,6 +28,7 @@
 		F53CB73B2C4D5F8400357D92 /* EvolutionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53CB7372C4D5F8400357D92 /* EvolutionService.swift */; };
 		F53CB73C2C4D5F8400357D92 /* PokemonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53CB7382C4D5F8400357D92 /* PokemonService.swift */; };
 		F53CB73D2C4D5F8400357D92 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53CB7392C4D5F8400357D92 /* Service.swift */; };
+		F5FCC83D2C4DFB3100569DC5 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FCC83C2C4DFB3100569DC5 /* PokemonDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		F53CB7372C4D5F8400357D92 /* EvolutionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolutionService.swift; sourceTree = "<group>"; };
 		F53CB7382C4D5F8400357D92 /* PokemonService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokemonService.swift; sourceTree = "<group>"; };
 		F53CB7392C4D5F8400357D92 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		F5FCC83C2C4DFB3100569DC5 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				F53CB6FB2C4D5D7300357D92 /* PokemonMainView.swift */,
 				F513D5872C4DBC4000A7B475 /* PokemonButtonStack.swift */,
 				F513D5892C4DBC8400A7B475 /* PokemonTopView.swift */,
+				F5FCC83C2C4DFB3100569DC5 /* PokemonDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				F53CB73A2C4D5F8400357D92 /* Endpoint.swift in Sources */,
 				F513D58A2C4DBC8400A7B475 /* PokemonTopView.swift in Sources */,
 				F53CB7302C4D5EB200357D92 /* HTTPMethod.swift in Sources */,
+				F5FCC83D2C4DFB3100569DC5 /* PokemonDetailView.swift in Sources */,
 				F53CB73C2C4D5F8400357D92 /* PokemonService.swift in Sources */,
 				F53CB6FC2C4D5D7300357D92 /* PokemonMainView.swift in Sources */,
 				F513D5882C4DBC4000A7B475 /* PokemonButtonStack.swift in Sources */,

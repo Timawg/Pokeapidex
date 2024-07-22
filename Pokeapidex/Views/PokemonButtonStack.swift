@@ -21,7 +21,7 @@ struct PokemonButtonStack: View {
                 RoundedRectangle(cornerSize: CGSize(width: 25, height: 25))
                     .foregroundStyle(.mint)
                     .overlay {
-                        Text("Find new Pokemon")
+                        Text("Explore new Pokemon")
                             .foregroundStyle(Color.white)
                     }
                     .frame(maxWidth: 250)

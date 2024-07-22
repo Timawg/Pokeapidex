@@ -10,10 +10,23 @@ import SwiftUI
 struct PokemonMainView: View {
     
     @Environment(PokemonMainViewModel.self) var viewModel: PokemonMainViewModel
-    
+    @State var searchQuery = ""
     @State var segmentState: SegmentState = .pokedex
     
     var body: some View {
+        pokemonView
+            .searchable(text: $searchQuery)
+            .task {
+                do {
+                    try await viewModel.getPokemon()
+                } catch {
+                    // Handle error
+                }
+            }
+    }
+    
+    @ViewBuilder
+    var pokemonView: some View {
         VStack(spacing: 8) {
             List {
                 pokemonTopSection
@@ -26,13 +39,6 @@ struct PokemonMainView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-        }
-        .task {
-            do {
-                try await viewModel.getPokemon()
-            } catch {
-                
-            }
         }
     }
     
@@ -67,7 +73,7 @@ struct PokemonMainView: View {
             Text("Pokedéx")
                 .foregroundStyle(.white)
                 .tag(SegmentState.pokedex)
-
+            
             Text("Saved")
                 .foregroundStyle(.black)
                 .tag(SegmentState.saved)
@@ -84,7 +90,7 @@ struct PokemonMainView: View {
     var savedPokemonList: some View {
         if !viewModel.savedPokemon.isEmpty {
             Section {
-                ForEach(viewModel.savedPokemon) { result in
+                ForEach(filteredSavedPokemon) { result in
                     Text(result.name.capitalized)
                         .foregroundStyle(.white)
                         .listRowBackground(Color.mint)
@@ -97,16 +103,30 @@ struct PokemonMainView: View {
     
     @ViewBuilder
     var pokemonList: some View {
-        if let list = viewModel.pokemonList {
-            Section {
-                ForEach(list.results) { result in
-                    Text(result.name.capitalized)
-                        .foregroundStyle(.white)
-                        .listRowBackground(Color.mint)
-                }
-            } header: {
-                Text("Pokédex")
+        Section {
+            ForEach(filteredPokemon) { result in
+                Text(result.name.capitalized)
+                    .foregroundStyle(.white)
+                    .listRowBackground(Color.mint)
             }
+        } header: {
+            Text("Pokédex")
+        }
+    }
+    
+    var filteredPokemon: [PokemonResult] {
+        if searchQuery.isEmpty {
+            viewModel.pokemonList
+        } else {
+            viewModel.pokemonList.filter { $0.name.lowercased().contains(searchQuery.lowercased()) }
+        }
+    }
+    
+    var filteredSavedPokemon: [Pokemon] {
+        if searchQuery.isEmpty {
+            viewModel.savedPokemon
+        } else {
+            viewModel.savedPokemon.filter { $0.name.lowercased().contains(searchQuery.lowercased()) }
         }
     }
 }

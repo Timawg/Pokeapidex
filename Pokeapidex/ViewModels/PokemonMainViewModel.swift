@@ -24,9 +24,10 @@ final class PokemonMainViewModel {
         self.pokemonService = pokemonService
     }
     
-    var pokemonList: PokemonList?
+    var pokemonList: [PokemonResult] = []
     var randomPokemon: Pokemon?
     var savedPokemon: [Pokemon] = getSavedPokemon()
+    var searchQuery: String = ""
     
     @MainActor
     func getPokemon() async throws {
@@ -36,12 +37,13 @@ final class PokemonMainViewModel {
     
     @MainActor
     func getAllPokemon() async throws {
-        pokemonList = try await pokemonService.getPokemonList(limit: 10000, offset: 0)
+        let list = try await pokemonService.getPokemonList(limit: 10000, offset: 0).results
+        pokemonList = list
     }
     
     @MainActor
     func randomizePokemon() async throws {
-        guard let random = pokemonList?.results.randomElement()?.name else {
+        guard let random = pokemonList.randomElement()?.name else {
             return
         }
         
@@ -66,7 +68,7 @@ final class PokemonMainViewModel {
     func isSaved(pokemon: Pokemon) -> Bool {
         return savedPokemon.contains { $0.id == pokemon.id }
     }
-    
+
     private static func getSavedPokemon() -> [Pokemon] {
         guard let data = Self.userDefaults.data(forKey: savedPokemonKey) else {
             return []
