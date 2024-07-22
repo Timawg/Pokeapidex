@@ -29,6 +29,7 @@
 		F53CB73C2C4D5F8400357D92 /* PokemonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53CB7382C4D5F8400357D92 /* PokemonService.swift */; };
 		F53CB73D2C4D5F8400357D92 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53CB7392C4D5F8400357D92 /* Service.swift */; };
 		F5FCC83D2C4DFB3100569DC5 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FCC83C2C4DFB3100569DC5 /* PokemonDetailView.swift */; };
+		F5FCC83F2C4E68A200569DC5 /* Evolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FCC83E2C4E68A200569DC5 /* Evolution.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		F53CB7382C4D5F8400357D92 /* PokemonService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokemonService.swift; sourceTree = "<group>"; };
 		F53CB7392C4D5F8400357D92 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		F5FCC83C2C4DFB3100569DC5 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
+		F5FCC83E2C4E68A200569DC5 /* Evolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evolution.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 			children = (
 				F53CB7332C4D5F7700357D92 /* Pokemon.swift */,
 				F53CB7322C4D5F7700357D92 /* PokemonList.swift */,
+				F5FCC83E2C4E68A200569DC5 /* Evolution.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				F53CB7352C4D5F7700357D92 /* Pokemon.swift in Sources */,
 				F53CB73B2C4D5F8400357D92 /* EvolutionService.swift in Sources */,
 				F53CB7312C4D5EB200357D92 /* NetworkService.swift in Sources */,
+				F5FCC83F2C4E68A200569DC5 /* Evolution.swift in Sources */,
 				F513D5802C4D7E8B00A7B475 /* PokemonType.swift in Sources */,
 				F513D5822C4D7EB300A7B475 /* Color + PokemonType.swift in Sources */,
 				F53CB73A2C4D5F8400357D92 /* Endpoint.swift in Sources */,

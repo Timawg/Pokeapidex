@@ -12,11 +12,14 @@ import Observation
 final class PokemonDetailViewModel {
     
     private let pokemonService: PokemonServiceProtocol
+    private let evolotionService: EvolutionServiceProtocol
     let pokemonName: String
     var pokemon: Pokemon?
+    var evolution: Evolution?
         
-    init(pokemonService: PokemonServiceProtocol, pokemonName: String, pokemon: Pokemon?) {
+    init(pokemonService: PokemonServiceProtocol, evolutionService: EvolutionServiceProtocol, pokemonName: String, pokemon: Pokemon?) {
         self.pokemonService = pokemonService
+        self.evolotionService = evolutionService
         self.pokemonName = pokemonName
         self.pokemon = pokemon
     }
@@ -25,6 +28,13 @@ final class PokemonDetailViewModel {
         if pokemon == nil {
             pokemon = try await pokemonService.getPokemon(name: pokemonName)
         }
+    }
+    
+    func getEvolution() async throws {
+        guard let id = pokemon?.id else {
+            return
+        }
+        evolution = try await evolotionService.getEvolutionChain(id: id)
     }
     
     var url: URL? {
@@ -62,8 +72,14 @@ struct PokemonDetailView: View {
                 if let types = viewModel.pokemon?.pokemonTypes {
                     Text(types.map { $0.rawValue.capitalized }.joined(separator: ", "))
                 }
-
-
+                
+                if let evolution = viewModel.evolution?.chain?.evolvesTo {
+                    VStack(spacing: 8) {
+                        ForEach(evolution) { chain in
+                            Text(chain.species?.name ?? "")
+                        }
+                    }
+                }
             }
             .scaledToFit()
         }
@@ -72,9 +88,9 @@ struct PokemonDetailView: View {
         .task {
             do {
                 try await viewModel.getPokemon()
+                try await viewModel.getEvolution()
             } catch {
-                
-                
+                print(error)                
             }
         }
     }
@@ -82,6 +98,7 @@ struct PokemonDetailView: View {
 
 #Preview {
     let service = PokemonService(networkService: NetworkService())
+    let evoService = EvolutionService(networkService: NetworkService())
     return PokemonDetailView()
-        .environment(PokemonDetailViewModel(pokemonService: service, pokemonName: "rayquaza", pokemon: nil))
+        .environment(PokemonDetailViewModel(pokemonService: service, evolutionService: evoService, pokemonName: "rayquaza", pokemon: nil))
 }

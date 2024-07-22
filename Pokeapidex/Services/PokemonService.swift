@@ -48,12 +48,12 @@ struct PokemonService: PokemonServiceProtocol {
     
     func getPokemonList(limit: Int = 10000, offset: Int = 0) async throws -> PokemonList {
         let endpoint: PokemonEndpoint = .getPokemonList(limit: limit, offset: offset)
-        return try await networkService.send(request: endpoint.createURLRequest(base: baseURL, queryItems: [.init(name: "limit", value: "\(limit)"), .init(name: "offset", value: "\(offset)")]))
+        return try await networkService.send(request: endpoint.createURLRequest(base: baseURL, queryItems: [.init(name: "limit", value: "\(limit)"), .init(name: "offset", value: "\(offset)")], cachePolicy: .returnCacheDataElseLoad))
     }
     
     func getPokemon(name: String) async throws -> Pokemon {
         let endpoint: PokemonEndpoint = .getPokemonByName(name)
-        return try await networkService.send(request: endpoint.createURLRequest(base: baseURL))
+        return try await networkService.send(request: endpoint.createURLRequest(base: baseURL, cachePolicy: .returnCacheDataElseLoad))
     }
     
     func getPokemon(id: Int) async throws -> Pokemon {

@@ -16,9 +16,11 @@ final class ServiceContainer {
     
     private let networkService: NetworkServiceProtocol = NetworkService()
     let pokemonService: PokemonServiceProtocol
+    let evolutionService: EvolutionServiceProtocol
     
     init() {
         self.pokemonService = PokemonService(networkService: networkService)
+        self.evolutionService = EvolutionService(networkService: networkService)
     }
 }
 
@@ -40,7 +42,11 @@ struct PokeapidexApp: App {
                                 .environment(PokemonMainViewModel(pokemonService: serviceContainer.pokemonService))
                         case .detail(let name, let pokemon):
                                 PokemonDetailView()
-                                .environment(PokemonDetailViewModel(pokemonService: serviceContainer.pokemonService, pokemonName: name, pokemon: pokemon))
+                                .environment(
+                                    PokemonDetailViewModel(
+                                        pokemonService: serviceContainer.pokemonService, evolutionService: serviceContainer.evolutionService, pokemonName: name, pokemon: pokemon
+                                    )
+                                )
                         }
                     }
             }
