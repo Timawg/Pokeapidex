@@ -12,7 +12,7 @@ protocol NetworkServiceProtocol {
     func send<T: Decodable>(request: URLRequest) async throws -> T
 }
 
-final class NetworkService: NetworkServiceProtocol, Observable {
+final class NetworkService: NetworkServiceProtocol{
     
     private let session: URLSession
     private let decoder: JSONDecoder

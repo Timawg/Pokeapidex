@@ -13,7 +13,7 @@ struct PokemonMainView: View {
     @Environment(PokemonMainViewModel.self) var viewModel: PokemonMainViewModel
     @State var searchQuery = ""
     @State var segmentState: SegmentState = .pokedex
-    
+
     var body: some View {
         pokemonView
             .searchable(text: $searchQuery)
@@ -21,7 +21,7 @@ struct PokemonMainView: View {
                 do {
                     try await viewModel.getPokemon()
                 } catch {
-                    // Handle error
+                    
                 }
             }
     }
@@ -100,6 +100,7 @@ struct PokemonMainView: View {
                         .listRowBackground(Color.mint)
                         .onTapGesture {
                             navigationPaths.append(.detail(result.name, result))
+                    
                         }
                 }
             } header: {

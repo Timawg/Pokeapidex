@@ -44,16 +44,43 @@ final class PokemonDetailViewModel {
         return url
     }
     
+    var expText: String {
+        if let weight = pokemon?.baseExperience {
+            return String(weight)
+        } else {
+           return ""
+        }
+    }
+    
+    var heightText: String {
+        if let weight = pokemon?.height {
+            return String(weight)
+        } else {
+           return ""
+        }
+    }
+    
+    var weightText: String {
+        if let weight = pokemon?.weight {
+            return String(weight)
+        } else {
+           return ""
+        }
+    }
+    
 }
 
 struct PokemonDetailView: View {
     
     @Environment(PokemonDetailViewModel.self) var viewModel: PokemonDetailViewModel
+    @State var animateGradient = false
+    
     
     var body: some View {
         ZStack {
             LinearGradient(colors: viewModel.pokemon?.colors.compactMap { $0 } ?? [.green, .mint], startPoint: .topLeading, endPoint: .bottomTrailing)
-            VStack(spacing: 8) {
+                .hueRotation(.degrees(animateGradient ? 45 : 0))
+            VStack(spacing: 16) {
                 if let url = viewModel.url {
                     AsyncImage(url: url) { image in
                         image
@@ -63,28 +90,83 @@ struct PokemonDetailView: View {
                     } placeholder: {
                         ProgressView()
                     }
+                    .frame(minHeight: 400)
                 }
                 if let name = viewModel.pokemon?.name {
                     Text(name.capitalized)
+                        .foregroundStyle(.white)
                         .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 }
                 
                 if let types = viewModel.pokemon?.pokemonTypes {
                     Text(types.map { $0.rawValue.capitalized }.joined(separator: ", "))
+                        .foregroundStyle(.white)
                 }
                 
-                if let evolution = viewModel.evolution?.chain?.evolvesTo {
-                    VStack(spacing: 8) {
-                        ForEach(evolution) { chain in
-                            Text(chain.species?.name ?? "")
-                        }
+                Divider()
+                    .padding()
+                HStack {
+                    VStack {
+                        Text("Base Stats")
+                            .foregroundStyle(.white)
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.white, lineWidth: 1)
+                            .shadow(color: .black, radius: 10)
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                            .padding(.horizontal, 20)
+                            .blur(radius: 2).overlay {
+                                Text(viewModel.expText)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white)
+                                    .shadow(color: /*@START_MENU_TOKEN@*/.black/*@END_MENU_TOKEN@*/, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                            }
+                    }
+                    VStack {
+                        Text("Height")
+                            .foregroundStyle(.white)
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.white, lineWidth: 1)
+                            .shadow(color: .black, radius: 10)
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                            .padding(.horizontal, 20)
+                            .blur(radius: 2).overlay {
+                                Text(viewModel.heightText)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white)
+                                    .shadow(color: /*@START_MENU_TOKEN@*/.black/*@END_MENU_TOKEN@*/, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                            }
+                    }
+                    
+                    VStack {
+                        Text("Weight")
+                            .foregroundStyle(.white)
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.white, lineWidth: 1)
+                            .shadow(color: .black, radius: 10)
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                            .padding(.horizontal, 20)
+                            .blur(radius: 2).overlay {
+                                    Text(viewModel.weightText)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white)
+                                    .shadow(color: /*@START_MENU_TOKEN@*/.black/*@END_MENU_TOKEN@*/, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                            }
                     }
                 }
+                .frame(maxHeight: 100)
             }
             .scaledToFit()
         }
         .navigationTitle(viewModel.pokemonName.capitalized)
         .ignoresSafeArea()
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                animateGradient.toggle()
+            }
+        }
         .task {
             do {
                 try await viewModel.getPokemon()
