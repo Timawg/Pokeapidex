@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PokemonMainView: View {
     
+    @Binding var navigationPaths: [NavigationPath]
     @Environment(PokemonMainViewModel.self) var viewModel: PokemonMainViewModel
     @State var searchQuery = ""
     @State var segmentState: SegmentState = .pokedex
@@ -51,8 +52,11 @@ struct PokemonMainView: View {
         } footer: {
             if let randomPokemon = viewModel.randomPokemon {
                 VStack {
-                    PokemonTopView(name: randomPokemon.name, urlString: randomPokemon.artworkUrl, colors: randomPokemon.pokemonTypes.map { $0.color })
+                    PokemonTopView(name: randomPokemon.name, urlString: randomPokemon.artworkUrl, colors: randomPokemon.colors)
                         .padding()
+                        .onTapGesture {
+                            navigationPaths.append(.detail(randomPokemon.name, randomPokemon))
+                        }
                     
                     PokemonButtonStack(saved: viewModel.isSaved(pokemon: randomPokemon)) {
                         Task {
@@ -94,6 +98,9 @@ struct PokemonMainView: View {
                     Text(result.name.capitalized)
                         .foregroundStyle(.white)
                         .listRowBackground(Color.mint)
+                        .onTapGesture {
+                            navigationPaths.append(.detail(result.name, result))
+                        }
                 }
             } header: {
                 Text("Your saved Pokémon")
@@ -108,6 +115,9 @@ struct PokemonMainView: View {
                 Text(result.name.capitalized)
                     .foregroundStyle(.white)
                     .listRowBackground(Color.mint)
+                    .onTapGesture {
+                        navigationPaths.append(.detail(result.name, nil))
+                    }
             }
         } header: {
             Text("Pokédex")
@@ -132,6 +142,6 @@ struct PokemonMainView: View {
 }
 
 #Preview {
-    PokemonMainView()
+    PokemonMainView(navigationPaths: .constant([]))
         .environment(PokemonMainViewModel(pokemonService: PokemonService(networkService: NetworkService())))
 }

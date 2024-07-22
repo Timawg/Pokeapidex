@@ -7,11 +7,6 @@
 
 import Foundation
 
-protocol Clonable<T> {
-    associatedtype T
-    func clone() -> T
-}
-
 struct PokemonList: Codable, Identifiable {
     let id: UUID = .init()
     
@@ -20,12 +15,8 @@ struct PokemonList: Codable, Identifiable {
     let results: [PokemonResult]
 }
 
-struct PokemonResult: Codable, Identifiable, Clonable, Equatable {
+struct PokemonResult: Codable, Identifiable, Equatable {
     let id: UUID = .init()
     let name: String
     let url: String
-    
-    func clone() -> Self {
-        return .init(name: name, url: url)
-    }
 }

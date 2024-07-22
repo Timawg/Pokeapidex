@@ -51,3 +51,10 @@ extension PokemonType {
             }
         }
 }
+
+extension Pokemon {
+    
+    var colors: [Color] {
+        return pokemonTypes.map { $0.color }
+    }
+}
